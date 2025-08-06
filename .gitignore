@@ -1,0 +1,46 @@
+# Ambiente virtual
+venv/
+.env/
+.venv/
+
+# Configurações do Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Arquivos de log e temporários
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Arquivos de cache do Jupyter
+.ipynb_checkpoints/
+
+# Diretórios criados por testes
+htmlcov/
+.tox/
+.nox/
+coverage.*
+.cache/
+.pytest_cache/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# IDEs e editores
+.vscode/
+.idea/
+
+# Compilação Cython
+build/
+dist/
+*.egg-info/
+
+# Arquivos do mypy e pylint
+.mypy_cache/
+.dmypy.json
+.pyre/
