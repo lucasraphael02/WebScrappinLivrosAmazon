@@ -44,3 +44,6 @@ dist/
 .mypy_cache/
 .dmypy.json
 .pyre/
+
+# Arquivos PDF
+*.pdf
