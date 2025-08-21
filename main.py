@@ -18,14 +18,13 @@ options.add_argument("user-agent=Mozilla/5.0")
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service, options=options)
 
-url = "https://www.amazon.com.br/s?k=fantasia&i=stripbooks&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91"
+# url = "https://www.amazon.com.br/s?k=fantasia&i=stripbooks&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91"
+url = "https://www.amazon.com.br/s?k=B0FD84D3SK%7CB0DHLTHVYF%7CB0CZYN1L9Z%7CB0D24NFJTB%7CB07NNQHM86%7CB0DBTYGKRV%7CB0D96K7NQF%7CB0CXBJSP7G%7CB0C2JT5ZQ1%7CB0C7K8KMM7%7CB0BMTN1TCR%7CB07MG7KVWW%7CB0FJVMSXNZ%7CB0CR6QXQQF%7CB0CX7GL944%7CB0F3FMGZ5G%7CB0C37J95ST%7CB0C1WDQDCY%7CB0B54VMDVS%7CB0BBQCT1WR%7CB0DFVRBK6T&i=digital-text&rh=p_36%3A-1&s=review-rank&language=pt_BR&ds=v1%3A0KTyEpHNRcYg1RPLt8BRvDimYH%2BgEx9iYybDeMGLB30&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=31NTPYS98MELJ&linkCode=sl2&linkId=75e898de77661f6ba8c2399ee551d1d4&qid=1754392564&rnid=5560477011&sprefix=b0fd84d3sk+b0dhlthvyf+b0czyn1l9z+b0d24nfjtb+b07nnqhm86+b0dbtygkrv+b0d96k7nqf+b0cxbjsp7g+b0c2jt5zq1+b0c7k8kmm7+b0bmtn1tcr+b07mg7kvww+b0fjvmsxnz+b0cr6qxqqf+b0cx7gl944+b0f3fmgz5g+b0c37j95st+b0c1wdqdcy+b0b54vmdvs+b0bbqct1wr+b0dfvrbk6t+%2Cdigital-text%2C237&tag=ebgracct-20&ref=as_li_ss_tl"
 
 MAX_TENTATIVAS = 5
 
 sucesso = False
 tentativas = 0
-listaLivros = []
-pdfBuilder = PDF('Lista de Livros')
 
 while not sucesso and tentativas < MAX_TENTATIVAS:
     print(f"Tentando carregar a página (tentativa {tentativas + 1})...")
@@ -49,13 +48,15 @@ if not sucesso:
     exit()
 
 
+listaLivros = []
+pdfBuilder = PDF('Lista de Livros')
 # print(len(itens))
 
 # exit()
 # print(itens)
-
+hasNextPage = True
 i=0
-for _ in range(1):
+while hasNextPage:
     wait = WebDriverWait(driver, 10)  # espera até 10 segundos
     wait.until(
         EC.presence_of_all_elements_located((By.XPATH, '//div[@data-component-type="s-search-result"]'))
@@ -172,6 +173,9 @@ for _ in range(1):
                 print("Erro:", e)
 
     pdfBuilder.adicionarLivros(listaLivros)
+    resposta = input("---------------------------------------------Aperte 0 para parar: ")
+    if resposta == '0':
+        hasNextPage=False
     try:
         element = wait.until(EC.presence_of_element_located(
         (By.CSS_SELECTOR, "div[class*='s-pagination-container']")
@@ -181,5 +185,7 @@ for _ in range(1):
         element = element.find_element(By.CSS_SELECTOR, "a[class*='s-pagination-next']")
         element.click()
     except:
+        print("Sem proxima página")
+        hasNextPage = False
         pass
 pdfBuilder.encerrarDocumento()
